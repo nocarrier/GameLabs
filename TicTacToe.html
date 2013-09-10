@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas TTT</title>
+</head>
+<body>
+<h1 style='text-align:center; margin-bottom: 5px; font-family:Georgia;'>Canvas TTT</h1>
+
+<div style='text-align:center; font-family:Georgia; font-size:12px'>
+    Tic Tac Toe
+</div>
+<br>
+
+<div style='text-align:center'>
+    <canvas id='game' style='border:solid 2px #aaa;'>
+        Your browser does not support the &lt;canvas&gt; tile.<br>
+        Please use a normal browser. Hint: Safari, Chrome, Firefox.
+    </canvas>
+</div>
+<script type="text/javascript" src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+    /* references : */
+    // click events:    http://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element
+
+
+    /**
+     * Canvas Tic Tac Toe
+     * Author: Shawn Molloy
+     **/
+    var SQ = 40;   // square size in pixels
+    var VCOUNT = 3;     // vertical width in squares
+    var HCOUNT = 3;     // horizontal width in squares
+    var WIDTH = SQ * HCOUNT;
+    var HEIGHT = SQ * VCOUNT;
+    var SPEED = 250; // game speed in the loop.
+
+    var canvas = document.getElementById('game');
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    var ctx = canvas.getContext('2d');
+
+    var gameBoardLeft = canvas.offsetLeft,
+            gameBoardTop = canvas.offsetTop,
+            tiles = [];
+
+    tile = function (ctx, x, y, h, w) {
+
+        var top = x;
+        var left = y;
+
+        var _isChecked = false;
+        this.isChecked = function () {
+            return _isChecked;
+        }
+
+        this.draw = function () {
+            ctx.fillStyle = getRandomColor();
+            ctx.fillRect(x, y, h, w);
+        }
+    }
+
+    function drawMap() {
+
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+        var row, col;
+
+        // build tiles array:
+        for (row = 0; row < VCOUNT; row++) {
+            for (col = 0; col < HCOUNT; col++) {
+                var top = col * SQ;
+                var left = row * SQ;
+                var t = new tile(ctx, top, left, SQ, SQ);
+                tiles.push(t);
+            }
+
+        }
+
+        // Render tiles:
+        tiles.forEach(function (tile) {
+            tile.draw();
+        });
+
+        /* event handlers */
+
+        $('#game').click(function (evnt) {
+            // var x = event.pageX - gameBoardLeft, y = event.pageY - gameBoardTop;
+
+            var x = evnt.clientX;
+            var    y = evnt.clientY;
+
+            console.log('click: ' + x + ' & ' + y);
+
+            // Render tiles:
+            tiles.forEach(function (tile) {
+                tile.draw();
+            });
+
+            for (var i = 0; i < tiles.length; i++) { // check whether:
+
+                console.log(tiles[i][0]);
+
+                if (x > tiles[i][0]            // mouse x between x and x + width
+                        && x < tiles[i][0] + tiles[i][2]
+                        && y > tiles[i][1]            // mouse y between y and y + height
+                        && y < tiles[i][1] + tiles[i][3]) {
+                    alert('Rectangle ' + i + ' clicked');
+                }
+
+            }
+        });
+
+    }
+
+    function rectClick() {
+
+    }
+
+
+    function checkWinner() {
+
+    }
+
+    function startGame() {
+        drawMap();
+    }
+
+    startGame();
+
+
+    /* utilities */
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.round(Math.random() * 15)];
+        }
+        return color;
+    }
+
+    function cout(msg) {
+        // todo: convert this to a fancy console window logger
+        console.log(msg);
+    }
+
+
+</script>
+
+
+</body>
+</html>
